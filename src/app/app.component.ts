@@ -67,10 +67,7 @@ export class AppComponent {
     this.swiperParent?.mousewheel.enable();
 
     this.swiperChild = this.swiperChildRef?.nativeElement.swiper;
-    this.swiperChild?.mousewheel.enable();
-
     this.swiperGrandChild = this.swiperGrandChildRef?.nativeElement.swiper;
-    // this.swiperGrandChild?.mousewheel.enable();
 
     /* Mouse scroll event handle */
     this.swiperParent?.on('scroll', (s, e) => {
@@ -91,17 +88,5 @@ export class AppComponent {
       }
       this.handleSwiperScrollEvent();
     });
-
-    this.swiperChild?.on('scroll', (s, e) => {
-      console.log('childScroll', s.activeIndex, e);
-      if (this.swiperChild?.allowSlideNext == false && e.deltaY > 0) {
-        this.swiperGrandChild?.slideNext();
-      }
-      if (this.swiperChild?.allowSlidePrev == false && e.deltaY < 0) {
-        this.swiperGrandChild?.slidePrev();
-      }
-      this.handleSwiperScrollEvent();
-    });
-
   }
 }
