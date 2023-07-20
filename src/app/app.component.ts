@@ -9,45 +9,58 @@ import { Swiper } from 'swiper/types';
 })
 export class AppComponent {
   title = 'swiper-test';
-  
+
   @ViewChild('swiperParentRef')
   swiperParentRef: ElementRef | undefined;
   swiperParent?: Swiper;
-  
+
   @ViewChild('swiperChildRef')
   swiperChildRef: ElementRef | undefined;
   swiperChild?: Swiper;
-  
+
+  handleSwiperScrollEvent() {
+    if (this.swiperParent?.activeIndex === 1) {
+      if (this.swiperChild?.activeIndex === 0) {
+        this.swiperParent!.allowSlideNext = false;
+        this.swiperParent!.allowSlidePrev = true;
+      } else if (this.swiperChild?.activeIndex === 1) {
+        this.swiperParent!.allowSlidePrev = false;
+        this.swiperParent!.allowSlideNext = true;
+      } else {
+        this.swiperParent!.allowSlideNext = false;
+        this.swiperParent!.allowSlidePrev = false;
+      }
+    } else {
+      this.swiperChild?.mousewheel.disable();
+      this.swiperParent!.allowSlideNext = true;
+      this.swiperParent!.allowSlidePrev = true;
+    }
+  }
+
   ngAfterViewInit() {
     register();
     this.swiperParent = this.swiperParentRef?.nativeElement.swiper;
     this.swiperParent?.mousewheel.enable();
-    
-    /* Only enable child mousewheel if parent's activeIndex is 1 */
-    // this.swiperParent?.on('slideChangeTransitionStart', () => {
-    //   console.log('ParentSlideChangeTransitionStart', this.swiperParent?.activeIndex);
-    //   if (this.swiperParent?.activeIndex === 1) {
-    //     this.swiperChild?.mousewheel.enable();
-    //   } else {
-    //     this.swiperChild?.mousewheel.disable();
-    //   }
-    // });
 
-    this.swiperParent?.on('slideChangeTransitionEnd', () => {
-      console.log('ParentSlideChangeTransitionEnd', this.swiperParent?.activeIndex);
-    });
+    this.swiperChild = this.swiperChildRef?.nativeElement.swiper;
+    this.swiperChild?.mousewheel.enable();
 
     /* Mouse scroll event handle */
     this.swiperParent?.on('scroll', (s, e) => {
-      console.log('scroll', s, e);
-    });
-    
-    this.swiperChild = this.swiperChildRef?.nativeElement.swiper;
-    this.swiperChild?.mousewheel.enable();
-    this.swiperChild?.on('slideChangeTransitionEnd', () => {
-      console.log('childSlideChangeTransitionEnd', this.swiperChild?.activeIndex);
+      console.log('parentScroll', s.activeIndex, e);
+      if (this.swiperParent?.allowSlideNext == false && e.deltaY > 0) {
+        this.swiperChild?.slideNext();
+      }
+      if (this.swiperParent?.allowSlidePrev == false && e.deltaY < 0) {
+        this.swiperChild?.slidePrev();
+      }
+      this.handleSwiperScrollEvent();
     });
 
+    this.swiperChild?.on('scroll', (s, e) => {
+      console.log('childScroll', s.activeIndex, e);
+      this.handleSwiperScrollEvent();
+    });
 
   }
 }

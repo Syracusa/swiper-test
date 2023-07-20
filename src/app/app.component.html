@@ -1,11 +1,12 @@
-<swiper-container class="swiper-wrapper" #swiperParentRef slides-per-view="auto" direction="vertical" force-to-axis="true">
+<swiper-container class="swiper-wrapper" #swiperParentRef slides-per-view="auto" direction="vertical">
   <swiper-slide class="swiper-parent-item1">
     <div>
       Slide 1
     </div>
   </swiper-slide>
   <swiper-slide class="swiper-parent-item2">
-    <swiper-container class="swiper-wrapper" #swiperChildRef slides-per-view="1" direction="horizontal" nested="true" force-to-axis="true">
+
+    <swiper-container class="swiper-wrapper" #swiperChildRef slides-per-view="1" direction="horizontal" nested="true">
       <swiper-slide class="swiper-child-item1">
         Child Slide 1
       </swiper-slide>
@@ -13,10 +14,16 @@
         Child Slide 2
       </swiper-slide>
     </swiper-container>
+
   </swiper-slide>
   <swiper-slide class="swiper-parent-item3">
     <div>
       Slide 3
+    </div>
+  </swiper-slide>
+  <swiper-slide class="swiper-parent-item4">
+    <div>
+      Slide 4
     </div>
   </swiper-slide>
 
