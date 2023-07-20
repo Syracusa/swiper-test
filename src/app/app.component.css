@@ -1,0 +1,35 @@
+.swiper-wrapper{
+    height: 97vh;
+}
+
+.swiper-parent-item1 {
+    height: 80%;
+    width: 100vw;
+    background-color: aliceblue;
+}
+
+.swiper-parent-item2 {
+    height: 100%;
+    width: 100vw;
+    background-color: aqua;
+}
+
+.swiper-child-item1 {
+    height: 100%;
+    width: 100vw;
+    z-index: 1;
+    background-color: aquamarine;
+}
+
+.swiper-child-item2 {
+    height: 100%;
+    width: 100vw;
+    z-index: 2;
+    background-color: azure;
+}
+
+.swiper-parent-item3 {
+    height: 50%;
+    width: 100vw;
+    background-color: beige;
+}
