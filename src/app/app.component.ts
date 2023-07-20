@@ -18,17 +18,41 @@ export class AppComponent {
   swiperChildRef: ElementRef | undefined;
   swiperChild?: Swiper;
 
+  @ViewChild('swiperGrandChildRef')
+  swiperGrandChildRef: ElementRef | undefined;
+  swiperGrandChild?: Swiper;
+
   handleSwiperScrollEvent() {
     if (this.swiperParent?.activeIndex === 1) {
       if (this.swiperChild?.activeIndex === 0) {
         this.swiperParent!.allowSlideNext = false;
         this.swiperParent!.allowSlidePrev = true;
+
+        this.swiperChild!.allowSlideNext = true;
+        this.swiperChild!.allowSlidePrev = true;
       } else if (this.swiperChild?.activeIndex === 1) {
+
         this.swiperParent!.allowSlidePrev = false;
-        this.swiperParent!.allowSlideNext = true;
+        this.swiperParent!.allowSlideNext = false;
+
+        if (this.swiperGrandChild?.activeIndex === 0) {
+          this.swiperChild!.allowSlideNext = false;
+          this.swiperChild!.allowSlidePrev = true;
+        } else if (this.swiperGrandChild?.activeIndex === 2) {
+          this.swiperChild!.allowSlideNext = true;
+          this.swiperChild!.allowSlidePrev = false;
+          
+          this.swiperParent!.allowSlideNext = true;
+        } else {
+          this.swiperChild!.allowSlideNext = false;
+          this.swiperChild!.allowSlidePrev = false;
+        }
       } else {
         this.swiperParent!.allowSlideNext = false;
         this.swiperParent!.allowSlidePrev = false;
+
+        this.swiperChild!.allowSlideNext = true;
+        this.swiperChild!.allowSlidePrev = true;
       }
     } else {
       this.swiperChild?.mousewheel.disable();
@@ -45,20 +69,37 @@ export class AppComponent {
     this.swiperChild = this.swiperChildRef?.nativeElement.swiper;
     this.swiperChild?.mousewheel.enable();
 
+    this.swiperGrandChild = this.swiperGrandChildRef?.nativeElement.swiper;
+    // this.swiperGrandChild?.mousewheel.enable();
+
     /* Mouse scroll event handle */
     this.swiperParent?.on('scroll', (s, e) => {
       console.log('parentScroll', s.activeIndex, e);
       if (this.swiperParent?.allowSlideNext == false && e.deltaY > 0) {
-        this.swiperChild?.slideNext();
+        if (this.swiperChild?.allowSlideNext == true) {
+          this.swiperChild?.slideNext();
+        } else {
+          this.swiperGrandChild?.slideNext();
+        }
       }
       if (this.swiperParent?.allowSlidePrev == false && e.deltaY < 0) {
-        this.swiperChild?.slidePrev();
+        if (this.swiperChild?.allowSlidePrev == true) {
+          this.swiperChild?.slidePrev();
+        } else {
+          this.swiperGrandChild?.slidePrev();
+        }
       }
       this.handleSwiperScrollEvent();
     });
 
     this.swiperChild?.on('scroll', (s, e) => {
       console.log('childScroll', s.activeIndex, e);
+      if (this.swiperChild?.allowSlideNext == false && e.deltaY > 0) {
+        this.swiperGrandChild?.slideNext();
+      }
+      if (this.swiperChild?.allowSlidePrev == false && e.deltaY < 0) {
+        this.swiperGrandChild?.slidePrev();
+      }
       this.handleSwiperScrollEvent();
     });
 
